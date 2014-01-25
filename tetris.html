@@ -1,0 +1,50 @@
+<html>
+  <head>
+    <link rel="stylesheet" href="css/web_arcade.css">
+
+    <script src="http://code.jquery.com/jquery-1.10.1.min.js"></script>
+    <script type="text/javascript" src="js/crafty.js"></script>
+    <script>
+      $(document).ready(function() {
+        var speed = 100;
+        Crafty.init(700,800, document.getElementById('game'));
+
+        Crafty.c("block", {
+            init: function(width, height) {
+                this.addComponent('2D, DOM, Color, Delay, Collision, wall_down')
+                .color('#49b112')
+                .requires('Keyboard')
+                .bind('KeyDown', function () {
+                    if (this.isDown('RIGHT_ARROW') || this.isDown('D')) {
+                        this.move('e',100);
+                    } else if (this.isDown('LEFT_ARROW') || this.isDown('A')) {
+                        this.move('w', 100);
+                    } else if (this.isDown('UP_ARROW') || this.isDown('W')) {
+                        this.rotation = this._rotation + 90;
+                    } else if (this.isDown('DOWN_ARROW') || this.isDown('s')) {
+                        this.rotation = this._rotation - 90;
+                    }
+                })
+                .delay(function() {
+                    this.move('s', speed);
+                    if(this.hit("wall_down")) {
+                        console.log("collide");
+                        this.stop();
+                    };
+                }, 800, -1)
+
+            },
+
+            attribute: function(width, height) {
+                this.attr({x: 300, y: 0, w: width, h: height});
+            }
+        });
+
+        Crafty.e("block").attribute(50, 200);
+      })
+    </script>
+  </head>
+  <body>
+    <div id="game" class="content"></div>
+  </body>
+</html>
