@@ -5,19 +5,24 @@ Game = {
     	Crafty.init(480, 320);
     	Crafty.background('black');
 
-		//Load assets
-		//Crafty.load(["assets"]), 
+		//Preload assets
+        Crafty.load(['assets/sounds/pew.ogg'], function() {
+            
+            Crafty.audio.add({
+				pew: 'assets/sounds/pew.ogg',
+				boom: 'assets/sounds/boom.wav',
+				ching: 'assets/sounds/ching.wav'
+			});  
+             
+            //start the main scene when loaded
+            Crafty.scene("main"); 
+        });
+        
 		
-		//score display
-		Crafty.e("2D, DOM, Text")
-			.text("Score")
-			.attr({x: Crafty.viewport.width - 150, 
-				   y: Crafty.viewport.height - 50, 
-				   w: 30, 
-				   h: 10})
-			.css({color: "#fff"});
-
-		Crafty.e('Ship');
+		Crafty.scene("main", function() {
+			Crafty.e('Score');
+			Crafty.e('Ship');
+			spawnRocks(5,15);
+		});
 	}
 }
-
