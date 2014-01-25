@@ -6,19 +6,27 @@
     <script type="text/javascript" src="js/crafty.js"></script>
     <script>
       $(document).ready(function() {
-        var speed = 100;
-        Crafty.init(700,800, document.getElementById('game'));
+        var speed = 400;
+        Crafty.init(700,810, document.getElementById('game'));
+
+        Crafty.c("floor", {
+            init: function() {
+                this.addComponent('2D, DOM, Color, Solid')
+                .attr({x: 0, y: 800, w: 600, h: 10})
+                .color('#000000');
+            }
+        });
 
         Crafty.c("block", {
             init: function(width, height) {
-                this.addComponent('2D, DOM, Color, Delay, Collision, wall_down')
+                this.addComponent('2D, DOM, Color, Delay, Collision, Solid')
                 .color('#49b112')
                 .requires('Keyboard')
                 .bind('KeyDown', function () {
                     if (this.isDown('RIGHT_ARROW') || this.isDown('D')) {
-                        this.move('e',100);
+                        this.move('e', 50);
                     } else if (this.isDown('LEFT_ARROW') || this.isDown('A')) {
-                        this.move('w', 100);
+                        this.move('w', 50);
                     } else if (this.isDown('UP_ARROW') || this.isDown('W')) {
                         this.rotation = this._rotation + 90;
                     } else if (this.isDown('DOWN_ARROW') || this.isDown('s')) {
@@ -26,13 +34,15 @@
                     }
                 })
                 .delay(function() {
-                    this.move('s', speed);
-                    if(this.hit("wall_down")) {
-                        console.log("collide");
-                        this.stop();
-                    };
-                }, 800, -1)
+                    this.move('s', 50);
+                }, speed, -1)
+                .onHit('Solid', this.stopMovement);
+            },
 
+            // Stops the movement
+            stopMovement: function() {
+                this.unbind('KeyDown');
+                this.destroy();
             },
 
             attribute: function(width, height) {
@@ -40,6 +50,7 @@
             }
         });
 
+        Crafty.e("floor");
         Crafty.e("block").attribute(50, 200);
       })
     </script>
