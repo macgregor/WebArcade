@@ -22,13 +22,13 @@ Crafty.c('Ship', {
 		        //create a bullet entity
 		        Crafty.e("2D, DOM, Text, bullet")
 		        .attr({
-		            x: this._x, //piece of shit alignment
-		            y: this._y, 
+		            x: this._x + (Math.cos((this._rotation /1) * Math.PI / 180)), //piece of shit alignment
+		            y: this._y + (Math.sin((this._rotation /1) * Math.PI / 180)), 
 		            w: 2, 
 		            h: 5, 
 		            rotation: this._rotation, 
-		            xspeed: 5 * Math.sin(this._rotation / 60), 
-		            yspeed: 5 * Math.cos(this._rotation / 60)
+		            xspeed: 5 * Math.sin(this._rotation * Math.PI / 180), 
+		            yspeed: 5 * Math.cos(this._rotation * Math.PI / 180)
 		        })
 		        .text(Math.floor( (Math.random()*10)) ) //1-9
 		        .textColor('#FFFFFF')
