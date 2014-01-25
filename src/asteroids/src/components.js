@@ -1,13 +1,7 @@
-Crafty.c('Actor', {
-  init: function() {
-    this.requires('2D, DOM, Grid');
-  },
-});
-
 //score display
 Crafty.c("Score", {
 	init: function() {
-		this.requires("Actor, 2D, DOM, Text")
+		this.requires("2D, DOM, Text")
 		.text("Score: 0")
 		.attr({x: Crafty.viewport.width - 150, 
 			   y: Crafty.viewport.height - 50, 
@@ -17,10 +11,11 @@ Crafty.c("Score", {
 	}
 });
 
+
 //Ship entity
 Crafty.c('Ship', {
 	init: function() {
-		this.requires("Actor, 2D, DOM, Text, Controls, Collision")
+		this.requires("2D, DOM, Text, Controls, Collision")
 		.text("A")
 		.attr({move: {
 				left: false, 
@@ -29,7 +24,7 @@ Crafty.c('Ship', {
 			down: false}, 
 			xspeed: 0, 
 			yspeed: 0, 
-			decay: 0.9, 
+			decay: 0.9,   
 		    x: Crafty.viewport.width / 2, 
 		    y: Crafty.viewport.height / 2, 
 		    score: 0})
@@ -127,6 +122,7 @@ Crafty.c('Ship', {
 		}).collision()
 		.onHit("asteroid", function() {
 		    //if Ship gets hit, restart the game
+		    scores = 0;
 		    Crafty.scene("main");
 		});
 	}	
@@ -171,7 +167,7 @@ Crafty.c("small", {
 		.textFont({ size: '20px', weight: 'bold', family: 'Arial'})
 	}
 });
-var scores = 0;
+
 //Asteroid component
 Crafty.c("asteroid", {   
     init: function() {
@@ -203,7 +199,9 @@ Crafty.c("asteroid", {
         }).collision()
         .onHit("bullet", function(e) {
             //if hit by a bullet increment the score
-            //scores += 5;
+            Crafty('Ship').score += 5;
+            Crafty('Score').text("Score: " + Crafty('Ship').score);
+
             //score.text("Score: " + scores);
             e[0].obj.destroy(); //destroy the bullet
             

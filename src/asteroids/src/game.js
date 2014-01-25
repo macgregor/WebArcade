@@ -12,7 +12,7 @@ Game = {
 				pew: 'assets/sounds/pew.ogg',
 				boom: 'assets/sounds/boom.wav',
 				ching: 'assets/sounds/ching.wav'
-			});  
+			});    
              
             //start the main scene when loaded
             Crafty.scene("main"); 
