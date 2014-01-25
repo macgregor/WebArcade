@@ -95,18 +95,22 @@ Crafty.scene('Loading', function () {
 	.css($text_css);
 	
 	//load and convert svg with canvg
-	var svg_data = '<svg width="100" height="100">' +
-						'<circle cx="50" cy="50" r="40" stroke="green" stroke-width="4" fill="yellow" />' +
-					'</svg>';
-	
-	canvg('svg_convert', svg_data);
 	var canvas = document.getElementById("svg_convert");
+	var ctx = canvas.getContext("2d");
+	var data = "<svg xmlns='http://www.w3.org/2000/svg' width='200' height='200'>" +
+				 "<foreignObject width='100%' height='100%'>" +
+				   "<div xmlns='http://www.w3.org/1999/xhtml' style='font-size:40px'>" +
+					 "<em>I</em> like <span style='color:white; text-shadow:0 0 2px blue;'>cheese</span>" +
+				   "</div>" +
+				 "</foreignObject>" +
+			   "</svg>";
+	var DOMURL = self.URL || self.webkitURL || self;
 	var img = new Image();
-	img.onload = function(){   // put this above img.src = …
-		Crafty.sprite(1, img, {
-			spr_player : [0, 0]
-		});
-		Crafty.scene('Game');
+	var svg = new Blob([data], {type: "image/svg+xml;charset=utf-8"});
+	var url = DOMURL.createObjectURL(svg);
+	img.onload = function() {
+		ctx.drawImage(img, 0, 0);
+		DOMURL.revokeObjectURL(url);
 	};
-	img.src = canvas.toDataURL("image/png");
+	img.src = url;
 });
