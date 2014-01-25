@@ -23,6 +23,7 @@ Game = {
 			Crafty.e('Score');
 			Crafty.e('Ship');
 			spawnRocks(5,15);
+			spawnPowerUp(5);
 		});
 	}
 }

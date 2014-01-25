@@ -1,22 +1,21 @@
 //score display
-Crafty.c("Score", {
+Crafty.c('Score', {
 	init: function() {
-		this.requires("2D, DOM, Text")
-		.text("Score: 0")
+		this.requires('2D, DOM, Text')
+		.text('Score: 0')
 		.attr({x: Crafty.viewport.width - 150, 
 			   y: Crafty.viewport.height - 50, 
 			   w: 30, 
 			   h: 10})
-		.css({color: "#fff"});
+		.css({color: '#fff'});
 	}
 });
-
 
 //Ship entity
 Crafty.c('Ship', {
 	init: function() {
-		this.requires("2D, DOM, Text, Controls, Collision")
-		.text("A")
+		this.requires('2D, DOM, Text, Controls, Collision')
+		.text('A')
 		.attr({move: {
 				left: false, 
 				right: false, 
@@ -28,10 +27,10 @@ Crafty.c('Ship', {
 		    x: Crafty.viewport.width / 2, 
 		    y: Crafty.viewport.height / 2, 
 		    score: 0})
-		.origin("center")
+		.origin('center')
 		.textColor('#FFFFFF')
 		.textFont({ size: '15px', weight: 'bold', family: 'Arial'})
-		.bind("KeyDown", function(e) {
+		.bind('KeyDown', function(e) {
 		    //on keydown, set the move booleans
 		    if(e.keyCode === Crafty.keys.RIGHT_ARROW) {
 		            this.move.right = true;
@@ -40,11 +39,11 @@ Crafty.c('Ship', {
 		    } else if(e.keyCode === Crafty.keys.UP_ARROW) {
 		            this.move.up = true;
 		    } else if (e.keyCode === Crafty.keys.SPACE) {
-		        console.log("Pew");
-		        Crafty.audio.play("pew"); //play pew sound
+		        console.log('Pew');
+		        Crafty.audio.play('pew'); //play pew sound
 
 		        //create a bullet entity
-		        Crafty.e("2D, DOM, Text, bullet")
+		        Crafty.e('2D, DOM, Text, bullet')
 		        .attr({
 		            x: this._x + (Math.cos((this._rotation /1) * Math.PI / 180)), //piece of shit alignment
 		            y: this._y + (Math.sin((this._rotation /1) * Math.PI / 180)), 
@@ -55,9 +54,9 @@ Crafty.c('Ship', {
 		            yspeed: 5 * Math.cos(this._rotation * Math.PI / 180)
 		        })
 		        .text(Math.floor( (Math.random()*10)) ) //1-9
-		        .textColor('#FFFFFF')
+		        .textColor('#FF9900')
 		        .textFont({family: 'Arial'})
-		        .bind("EnterFrame", function() {
+		        .bind('EnterFrame', function() {
 		            this.x += this.xspeed;
 		            this.y -= this.yspeed;
 		            
@@ -70,7 +69,7 @@ Crafty.c('Ship', {
 		           	}
 		        });
 			}
-		}).bind("KeyUp", function(e) {
+		}).bind('KeyUp', function(e) {
 		    //on key up, set the move booleans to false
 		    if(e.keyCode === Crafty.keys.RIGHT_ARROW) {
 		            this.move.right = false;
@@ -79,7 +78,7 @@ Crafty.c('Ship', {
 		    } else if(e.keyCode === Crafty.keys.UP_ARROW) {
 		            this.move.up = false;
 		    }
-		}).bind("EnterFrame", function() {
+		}).bind('EnterFrame', function() {
 		    if(this.move.right) this.rotation += 5;
 		    if(this.move.left) this.rotation -= 5;
 		    
@@ -120,10 +119,10 @@ Crafty.c('Ship', {
 	            spawnRocks(lastCount, lastCount * 2);
 		    }
 		}).collision()
-		.onHit("asteroid", function() {
+		.onHit('asteroid', function() {
 		    //if Ship gets hit, restart the game
 		    scores = 0;
-		    Crafty.scene("main");
+		    Crafty.scene('main');
 		});
 	}	
 });
@@ -132,54 +131,54 @@ Crafty.c('Ship', {
 var asteroidCount,lastCount;
 var alpha = ['a','b','c','d','e','f','g','h','i','j','k','l','m','n','o','p','q','r','s','t','u','v','w','x','y','z']
 
-Crafty.c("big", {
+Crafty.c('big', {
 	init: function() {
-		this.requires("2D, DOM, Text, Color")
+		this.requires('2D, DOM, Text, Color')
 		.attr({	w: 40, 
 			    h: 40})  
-		.color('red')
+		//.color('red')
 		.text(alpha[Math.floor(Math.random()*26)].toUpperCase())
-		.textColor('#FFFFFF')
+		.textColor('#FF00FF')
 		.textFont({ size: '40px', weight: 'bold', family: 'Arial'})
 	}
 });
 
-Crafty.c("medium", {
+Crafty.c('medium', {
 	init: function() {
-		this.requires("2D, DOM, Text, Color")
+		this.requires('2D, DOM, Text, Color')
 		.attr({	w: 30, 
 			    h: 30})
-		.color('cyan')
+		//.color('cyan')
 		.text(alpha[Math.floor(Math.random()*26)].toUpperCase())
-		.textColor('#FFFFFF')
+		.textColor('#00FFFF')
 		.textFont({ size: '30px', weight: 'bold', family: 'Arial'})
 	}
 });
 
-Crafty.c("small", {
+Crafty.c('small', {
 	init: function() {
-		this.requires("2D, DOM, Text, Color")
+		this.requires('2D, DOM, Text, Color')
 		.attr({	w: 20, 
 			    h: 20})  
-		.color('green')
+		//.color('green')
 		.text(alpha[Math.floor(Math.random()*26)])
-		.textColor('#FFFFFF')
+		.textColor('#00FF00')
 		.textFont({ size: '20px', weight: 'bold', family: 'Arial'})
 	}
 });
 
 //Asteroid component
-Crafty.c("asteroid", {   
+Crafty.c('asteroid', {   
     init: function() {
-    	this.requires("2D, DOM, Text")
-        this.origin("center");
+    	this.requires('2D, DOM, Text')
+        this.origin('center');
         this.attr({
             x: Crafty.math.randomInt(0, Crafty.viewport.width), //give it random positions, rotation and speed
             y: Crafty.math.randomInt(0, Crafty.viewport.height),
             xspeed: Crafty.math.randomInt(1, 2), 
             yspeed: Crafty.math.randomInt(1, 2),
             rspeed: Crafty.math.randomInt(-2, 2)
-        }).bind("EnterFrame", function() {
+        }).bind('EnterFrame', function() {
             this.x += this.xspeed;
             this.y += this.yspeed;
             this.rotation += this.rspeed;
@@ -197,23 +196,23 @@ Crafty.c("asteroid", {
                 this.y = Crafty.viewport.height;
             }
         }).collision()
-        .onHit("bullet", function(e) {
+        .onHit('bullet', function(e) {
             //if hit by a bullet increment the score
             Crafty('Ship').score += 5;
-            Crafty('Score').text("Score: " + Crafty('Ship').score);
+            Crafty('Score').text('Score: ' + Crafty('Ship').score);
 
-            //score.text("Score: " + scores);
+            //score.text('Score: ' + scores);
             e[0].obj.destroy(); //destroy the bullet
             
             var size;
             //decide what size to make the asteroid
-            if(this.has("big")) {
-                this.removeComponent("big").addComponent("medium");
-                size = "medium";
-            } else if(this.has("medium")) {
-                this.removeComponent("medium").addComponent("small");
-                size = "small";
-            } else if(this.has("small")) { //if the lowest size, delete self
+            if(this.has('big')) {
+                this.removeComponent('big').addComponent('medium');
+                size = 'medium';
+            } else if(this.has('medium')) {
+                this.removeComponent('medium').addComponent('small');
+                size = 'small';
+            } else if(this.has('small')) { //if the lowest size, delete self
                 asteroidCount--;
                 this.destroy();
                 return;
@@ -225,8 +224,49 @@ Crafty.c("asteroid", {
             
             asteroidCount++;
             //split into two asteroids by creating another asteroid
-            Crafty.e("2D, DOM, "+size+", Collision, asteroid")
+            Crafty.e('2D, DOM, '+size+', Collision, asteroid')
             .attr({x: this._x, y: this._y});
+        });
+    }
+});
+
+Crafty.c('PowerUp', {
+    init: function() {
+    	this.requires('2D, DOM, Text, PowerUp')
+        this.origin('center')
+        this.text('$')
+        this.textColor('#FFFF00')
+        this.textFont({family: 'Tahoma'})
+        this.attr({
+            x: Crafty.math.randomInt(0, Crafty.viewport.width), 
+            y: Crafty.math.randomInt(0, Crafty.viewport.height),
+            xspeed: Crafty.math.randomInt(1, 2), 
+            yspeed: Crafty.math.randomInt(1, 2),
+            rspeed: Crafty.math.randomInt(-2, 2)
+        }).bind('EnterFrame', function() {
+            this.x += this.xspeed;
+            this.y += this.yspeed;
+            this.rotation += this.rspeed;
+            
+            if(this._x > Crafty.viewport.width) {
+                this.x = -64;
+            }
+            if(this._x < -64) {
+                this.x =  Crafty.viewport.width;
+            }
+            if(this._y > Crafty.viewport.height) {
+                this.y = -64;
+            }
+            if(this._y < -64) {
+                this.y = Crafty.viewport.height;
+            }
+        }).collision()
+        .onHit('Ship', function(e) {
+            //if hit by a bullet increment the score
+            Crafty('Ship').score += 100;
+            Crafty('Score').text('Score: ' + Crafty('Ship').score);
+            //Crafty('Ship').textColor('#FFFF00');
+            this.destroy(); //destroy the bullet
         });
     }
 });
@@ -238,6 +278,12 @@ function spawnRocks(lower, upper) {
     lastCount = rocks;
     
     for(var i = 0; i < rocks; i++) {
-        Crafty.e("2D, DOM, big, Collision, asteroid");
+        Crafty.e('2D, DOM, big, Collision, asteroid');
     }
+}
+
+function spawnPowerUp(amount) {
+	for(var i = 0; i < amount; i++) {
+		Crafty.e('2D, DOM, small, Collision, PowerUp');
+	}
 }
