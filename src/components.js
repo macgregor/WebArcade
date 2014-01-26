@@ -27,64 +27,86 @@ Crafty.c('Actor', {
   },
 });
 
-// A Tree is just an Actor with a certain color
-Crafty.c('Tree', {
-  init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 125, 40)');
-  },
+Crafty.c('Barricade', {
+	init: function(){
+		this.requires('Actor, Color, Solid');
+		this.w = this.w * 4;
+	}
 });
 
-// A Bush is just an Actor with a certain color
-Crafty.c('Bush', {
+Crafty.c('Laser', {
+	speed: 10,
+	init: function(){
+		this.requires('Actor, Color, Solid, Collision')
+			.color('rgb(100, 0, 0)')
+			.onHit('Vader', function(){
+				this.destroy();
+			})
+			.onHit('Barricade', function(){
+				this.y = - 100;
+				this.destroy();
+			})
+			.bind("EnterFrame", function(){
+				this.y = this.y - this.speed;
+				
+				if(this.y < 0){ 
+					this.destroy();
+				}
+			});
+	},
+});
+
+// A Tree is just an Actor with a certain color
+Crafty.c('Vader', {
   init: function() {
-    this.requires('Actor, Color, Solid')
-      .color('rgb(20, 185, 40)');
+    this.requires('Actor, Color, Solid, Collision')
+		.color('rgb(20, 125, 40)')
+		.onHit('Laser', function(){
+			this.destroy();
+		})
+		.onHit('Barricade', function(){
+			this.destroy();
+		});
   },
 });
 
 // This is the player-controlled character
-Crafty.c('PlayerCharacter', {
+Crafty.c('Player', {
+	move_distance: 10,
 	init: function() {
-		this.requires('Actor, Fourway, Color, Collision, Keyboard, Mouse, spr_player')
-			.fourway(4)
-			.stopOnSolids()
-			.onHit('Village', this.visitVillage);
+		this.requires('Actor, Color, Collision, Keyboard')
+			.color('rgb(20, 75, 40)')
+			.registerInputListener();
 	},
 	
-	// Registers a stop-movement function to be called when
-	// this entity hits an entity with the "Solid" component
-	stopOnSolids: function() {
-		this.onHit('Solid', this.stopMovement);		 
+	registerInputListener: function(){
+		this.bind("EnterFrame", function(){
+			if(this.isDown('LEFT_ARROW') || this.isDown('A')){
+				if(this.x - this.move_distance > 0){
+					this.x = this.x - this.move_distance;
+				} else{
+					this.x = 0;
+				}
+			} else if (this.isDown('RIGHT_ARROW') || this.isDown('D')){
+				if(this.x + this.move_distance < Game.width_px() - this.w){
+					this.x = this.x + this.move_distance;
+				} else{
+					this.x = Game.width_px() - this.w;
+				}
+			}
+		});
+		
+		this.bind("KeyDown", function(){
+			if(this.isDown('SPACE')){
+				this.shoot();
+			}
+		});
+		
 		return this;
 	},
-	 
-	// Stops the movement
-	stopMovement: function() {
-		this._speed = 0;
-		if (this._movement) {
-			this.x -= this._movement.x;
-			this.y -= this._movement.y;
-		}
-	},
 	
-	// Respond to this player visiting a village
-	visitVillage: function(data) {
-		villlage = data[0].obj;
-		villlage.collect();
-	}
-});
-
-// A village is a tile on the grid that the PC must visit in order to win the game
-Crafty.c('Village', {
-	init: function() {
-		this.requires('Actor, Color')
-		.color('rgb(170, 125, 40)');
-	},
-	 
-	collect: function() {
-		this.destroy();
-		Crafty.trigger('VillageVisited', this);
+	shoot: function(){
+		Crafty.e('Laser').attr({x: this.x, y: this.y - 10});
 	}
 });
 

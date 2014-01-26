@@ -2,18 +2,30 @@
 <html>
 <head>
   <script src="lib/crafty.js"></script>
-  <script type="text/javascript" src="lib/canvg/rgbcolor.js"></script> 
-  <script type="text/javascript" src="lib/canvg/StackBlur.js"></script>
-  <script type="text/javascript" src="lib/canvg/canvg.js"></script> 
   <script src="src/game.js"></script>
   <script src="src/components.js"></script>
   <script src="src/scenes.js"></script>
+  <link href="src/style.css" rel="stylesheet" type="text/css">
   <script>
 	window.console.log("http://buildnewgames.com/introduction-to-crafty/");	
     window.addEventListener('load', Game.start);
   </script>
 </head>
 <body>
-	<canvas id="svg_convert" width="200px" height="200px"></canvas> 
+	<div id="content">
+		<div id="title" class="center">
+			<h2>Game Title</h2>
+		</div>
+		<div id="cr-stage" class="center"></div>
+		<div id="footer">
+			<div id="left">
+				<div id="score">Score: 100,000</div>
+				<div id="lives">Lives: 3</div>
+			</div>
+			<div id="right">
+				<div id="controls">Controls: WASD</div>
+			</div>
+		</div>
+	</div>
 </body>
 </html>
