@@ -1,0 +1,46 @@
+#content {
+    top: 50%;
+    left: 50%;
+    width:800px;
+    height:710px;
+    margin-top: -400px; /*set to a negative number 1/2 of your height*/
+    margin-left: -355px; /*set to a negative number 1/2 of your width*/
+    border: 1px solid #ccc;
+    background-color: #f3f3f3;
+    position:fixed;
+}
+
+.center{
+	width: 50%; 
+	margin: 0 auto;
+}
+
+#title h2{
+	text-align:center;
+}
+
+#footer{
+	width: 100%
+}
+
+#footer div{
+	width: 50%;
+}
+
+#footer #left{
+	float: left;
+}
+
+#footer #left div{
+	width: 100%;
+	text-align: left;
+}
+
+#footer #right{
+	float: right;
+}
+
+#footer #right div{
+	width: 100%;
+	text-align: right;
+}
