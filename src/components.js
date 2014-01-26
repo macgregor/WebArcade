@@ -27,23 +27,18 @@ Crafty.c('Actor', {
   },
 });
 
-Crafty.c('Barricade', {
-	init: function(){
-		this.requires('Actor, Color, Solid');
-		this.w = this.w * 4;
-	}
-});
-
 Crafty.c('Laser', {
 	speed: 10,
 	init: function(){
-		this.requires('Actor, Color, Solid, Collision')
-			.color('rgb(100, 0, 0)')
-			.onHit('Vader', function(){
-				this.destroy();
-			})
-			.onHit('Barricade', function(){
-				this.y = - 100;
+		this.requires('Actor, Color, Collision')
+			.color('rgb(100, 0, 0)');
+	},
+});
+
+Crafty.c('PlayerLaser', {
+	init: function(){
+		this.requires('Laser')
+			.onHit('Enemy', function(){
 				this.destroy();
 			})
 			.bind("EnterFrame", function(){
@@ -56,27 +51,73 @@ Crafty.c('Laser', {
 	},
 });
 
-// A Tree is just an Actor with a certain color
-Crafty.c('Vader', {
-  init: function() {
-    this.requires('Actor, Color, Solid, Collision')
-		.color('rgb(20, 125, 40)')
-		.onHit('Laser', function(){
-			this.destroy();
-		})
-		.onHit('Barricade', function(){
-			this.destroy();
-		});
-  },
+Crafty.c('EnemyLaser', {
+	init: function(){
+		this.requires('Laser')
+			.onHit('Player', function(){
+				this.destroy();
+			})
+			.bind("EnterFrame", function(){
+				this.y = this.y + this.speed;
+				
+				if(this.y > Game.height_px()){ 
+					this.destroy();
+				}
+			});
+	},
 });
 
+Crafty.c('Enemy', {
+	shouldDestroy: false,
+	score: null,
+	init: function() {
+		this.requires('Actor, Solid, Collision')
+			.attr({w: 24, h: 24})
+			.registerCollisions();
+	},
+  
+	registerCollisions: function(){
+		this.onHit('PlayerLaser', function(){
+			this.shouldDestroy = true;
+			this.score = Crafty.e('2D, DOM, Text')
+				.text('Lives: ' + this.lives)
+				.attr({ x: 10, y: 30, w:50, h: 20})
+				.css($score_text_css);
+			Crafty.trigger("Score" , this);
+		});
+	
+		return this;
+	},
+  
+	shoot: function(){
+		Crafty.e('EnemyLaser').attr({w: 4, h: 8, x: this.x, y: this.y - 10});
+	},
+});
+
+Crafty.c('Vader', {
+	speed: 1,
+	init: function() {
+		this.requires('Enemy, spr_vader');
+	},
+});
+
+Crafty.c('Tie', {
+	speed: 1,
+	init: function(){
+		this.requires('Enemy, spr_tie');
+	},
+});
+	
 // This is the player-controlled character
 Crafty.c('Player', {
-	move_distance: 10,
+	move_distance: 7,
 	init: function() {
-		this.requires('Actor, Color, Collision, Keyboard')
-			.color('rgb(20, 75, 40)')
-			.registerInputListener();
+		this.requires('Actor, Color, Collision, Keyboard, spr_player')
+			.attr({w: 24, h: 24})
+			.registerInputListener()
+			.onHit('EnemyLaser', function(){
+				Crafty.trigger('Death', this);
+			});
 	},
 	
 	registerInputListener: function(){
@@ -106,8 +147,9 @@ Crafty.c('Player', {
 	},
 	
 	shoot: function(){
-		Crafty.e('Laser').attr({x: this.x, y: this.y - 10});
+		Crafty.e('PlayerLaser').attr({w: 100, h: 100, x: this.x, y: this.y - 10});
 	}
 });
 
-$text_css = { 'font-size': '24px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }
+$text_css = { 'font-size': '36px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }
+$score_text_css = { 'font-size': '36px', 'font-family': 'Arial', 'color': 'red', 'text-align': 'center' }

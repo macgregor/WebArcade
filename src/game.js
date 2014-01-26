@@ -2,12 +2,15 @@ Game = {
   // This defines our grid's size and the size of each of its tiles
   map_grid: {
     width:  32,
-    height: 24,
+    height: 32,
     tile: {
       width:  24,
       height: 24
     }
   },
+  
+  step: 0,
+  wait: 70,
 
   // The total width of the game screen. Since our grid takes up the entire screen
   //  this is just the width of a tile times the width of the grid
@@ -33,7 +36,7 @@ Game = {
   start: function() {
     // Start crafty and set a background color so that we can see it's working
     Crafty.init(Game.width_px(), Game.height_px());
-    Crafty.background('rgb(249, 223, 125)');
+    Crafty.background('rgb(0, 0, 0)');
 
 	 // Simply start the "Loading" scene to get things going
 	Crafty.scene('LoadVader');
