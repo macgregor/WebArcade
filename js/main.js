@@ -23,6 +23,7 @@
  
   }); 
 
+var totalfeed = 0;
 
   COLORS = [
     'rgb(255, 0, 0)',

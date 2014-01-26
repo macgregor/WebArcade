@@ -28,3 +28,8 @@ body, html {
       font-size: 20px;
       line-height: 2;
 }
+
+tr > td
+{
+  padding-bottom: 3em;
+}

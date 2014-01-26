@@ -9,6 +9,7 @@
           makeBlock: function(x, y, current_dir, next_dir, color){
             this.attr({x: x, y: y, current_dir: current_dir, next_dir: next_dir, COLOR: color, current_feedColor: false, next_feedColor: false})
                 .color(color);
+                totalfeed = totalfeed + 1;
             return this;
           },
           moveTo: function(){
