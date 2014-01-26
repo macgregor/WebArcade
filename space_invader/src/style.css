@@ -2,9 +2,9 @@
     top: 50%;
     left: 50%;
     width:800px;
-    height:710px;
+    height:850px;
     margin-top: -400px; /*set to a negative number 1/2 of your height*/
-    margin-left: -355px; /*set to a negative number 1/2 of your width*/
+    margin-left: -425px; /*set to a negative number 1/2 of your width*/
     border: 1px solid #ccc;
     background-color: #f3f3f3;
     position:fixed;

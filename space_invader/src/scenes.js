@@ -28,12 +28,12 @@ Crafty.scene('SpaceInvader', function() {
 	this.scoreText = Crafty.e('2D, DOM, Text')
 		.text('Score: ' + this.score)
 		.attr({ x: 10, y: 10, w: 100, h: 20})
-		.css($text_css);
+		.css($hud_text_css);
 		
 	this.lifeText = Crafty.e('2D, DOM, Text')
 		.text('Lives: ' + this.lives)
 		.attr({ x: 10, y: 30, w:50, h: 20})
-		.css($text_css);
+		.css($hud_text_css);
 	
 	
 	var enemy_row_size = (Game.map_grid.width / 4);
@@ -111,13 +111,24 @@ Crafty.scene('SpaceInvader', function() {
 	});
 	
 	this.scoreListener = this.bind("Score", function(obj){
+		var kill;
 		if(obj.has('Vader')){
-			this.score += 300;
+			kill = 300;
 		} else{
-			this.score += 100;
+			kill = 100;
 		}
 		
+		this.score += kill
 		this.scoreText.text('Score: ' + this.score)
+		
+		var tempScore = Crafty.e('2D, DOM, Text')
+			.text(kill)
+			.attr({ x: obj.x, y: obj.y, w:50, h: 20})
+			.css($score_text_css);
+		
+		Crafty.e("Delay").delay(function() {
+			tempScore.destroy();
+		}, 1000, 0);		
 	});
 });
 
