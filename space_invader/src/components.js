@@ -30,8 +30,7 @@ Crafty.c('Actor', {
 Crafty.c('Laser', {
 	speed: 10,
 	init: function(){
-		this.requires('Actor, Color, Collision')
-			.color('rgb(100, 0, 0)');
+		this.requires('Actor, Color, Collision');
 	},
 });
 
@@ -47,7 +46,8 @@ Crafty.c('PlayerLaser', {
 				if(this.y < 0){ 
 					this.destroy();
 				}
-			});
+			})
+			.color('rgb(100, 0, 0)');
 	},
 });
 
@@ -63,13 +63,13 @@ Crafty.c('EnemyLaser', {
 				if(this.y > Game.height_px()){ 
 					this.destroy();
 				}
-			});
+			})
+			.color('rgb(0, 100, 0)');
 	},
 });
 
 Crafty.c('Enemy', {
 	shouldDestroy: false,
-	score: null,
 	init: function() {
 		this.requires('Actor, Solid, Collision')
 			.attr({w: 24, h: 24})
@@ -79,10 +79,6 @@ Crafty.c('Enemy', {
 	registerCollisions: function(){
 		this.onHit('PlayerLaser', function(){
 			this.shouldDestroy = true;
-			this.score = Crafty.e('2D, DOM, Text')
-				.text('Lives: ' + this.lives)
-				.attr({ x: 10, y: 30, w:50, h: 20})
-				.css($score_text_css);
 			Crafty.trigger("Score" , this);
 		});
 	
@@ -147,9 +143,10 @@ Crafty.c('Player', {
 	},
 	
 	shoot: function(){
-		Crafty.e('PlayerLaser').attr({w: 100, h: 100, x: this.x, y: this.y - 10});
+		Crafty.e('PlayerLaser').attr({w: 4, h: 8, x: this.x, y: this.y - 10});
 	}
 });
 
-$text_css = { 'font-size': '36px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }
+$text_css = { 'font-size': '128px', 'font-family': 'Arial', 'color': 'white', 'text-align': 'center' }
+$hud_text_css = { 'font-size': '36px', 'font-family': 'Arial', 'color': 'white' }
 $score_text_css = { 'font-size': '36px', 'font-family': 'Arial', 'color': 'red', 'text-align': 'center' }
