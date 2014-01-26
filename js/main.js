@@ -1,3 +1,5 @@
+  // This code has been adapted from John's (thebluber) snake game and the base code can be found at https://github.com/thebluber/snake/blob/master/index.html
+
   //sprites
   Crafty.sprite(15, 'images/snake.svg', {
     snake: [0, 0]  
