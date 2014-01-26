@@ -2,7 +2,7 @@ Game = {
   	// Initialize and start our game
 	start: function() {
    		// Start crafty and set a background color so that we can see it's working
-    	Crafty.init(480, 320);
+    	Crafty.init(720, 480);
     	Crafty.background('black');
 
 		//Preload assets
@@ -21,9 +21,12 @@ Game = {
 		
 		Crafty.scene("main", function() {
 			Crafty.e('Score');
+			Crafty.e('Lives');
 			Crafty.e('Ship');
-			spawnRocks(5,15);
-			spawnPowerUp(5);
+			
+			//spawnPower();
+			spawnRocks(5,20);
+			spawnMoney(5);
 		});
 	}
 }
