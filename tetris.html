@@ -6,52 +6,89 @@
     <script type="text/javascript" src="js/crafty.js"></script>
     <script>
       $(document).ready(function() {
-        var speed = 400;
-        Crafty.init(700,810, document.getElementById('game'));
+        var frame_width = 600;
+        var frame_height = 800;
+        Crafty.init(frame_width, frame_height, document.getElementById('game'));
 
-        Crafty.c("floor", {
+        //  on a grid of tiles
+        Crafty.c('Grid', {
             init: function() {
-                this.addComponent('2D, DOM, Color, Solid')
-                .attr({x: 0, y: 800, w: 600, h: 10})
-                .color('#000000');
+                this.attr({
+                    w: Game.map_grid.tile.width,
+                    h: Game.map_grid.tile.height
+                });
+            },
+
+            // Locate this entity at the given position on the grid
+            at: function(x, y) {
+                if (x === undefined && y === undefined) {
+                    return { x: this.x/Game.map_grid.tile.width, y: this.y/Game.map_grid.tile.height };
+                } else {
+                    this.attr({ x: x * Game.map_grid.tile.width, y: y * Game.map_grid.tile.height });
+                    return this;
+                }
             }
         });
 
-        Crafty.c("block", {
-            init: function(width, height) {
-                this.addComponent('2D, DOM, Color, Delay, Collision, Solid')
-                .color('#49b112')
-                .requires('Keyboard')
-                .bind('KeyDown', function () {
-                    if (this.isDown('RIGHT_ARROW') || this.isDown('D')) {
-                        this.move('e', 50);
-                    } else if (this.isDown('LEFT_ARROW') || this.isDown('A')) {
-                        this.move('w', 50);
-                    } else if (this.isDown('UP_ARROW') || this.isDown('W')) {
-                        this.rotation = this._rotation + 90;
-                    } else if (this.isDown('DOWN_ARROW') || this.isDown('s')) {
-                        this.rotation = this._rotation - 90;
-                    }
-                })
-                .delay(function() {
-                    this.move('s', 50);
-                }, speed, -1)
-                .onHit('Solid', this.stopMovement);
+        Crafty.c("platform", {
+            init: function() {
+                this.addComponent('2D, DOM, Color, Solid')
+                .color('#000000');
             },
 
-            // Stops the movement
-            stopMovement: function() {
-                this.unbind('KeyDown');
-                this.destroy();
+            attribute: function(x_pos, y_pos, width, height) {
+                this.attr({x: x_pos, y: y_pos, w: width, h: height});
+            }
+        });
+
+        Crafty.c("player", {
+            init: function() {
+                this.addComponent('2D, DOM, Color, Collision, Solid, Gravity, Fourway')
+                .color('#49b112')
+                .requires('Keyboard')
+                .origin('center')
+                .fourway(12)
+                .gravity('Solid')
+                .gravityConst(.5);
             },
 
             attribute: function(width, height) {
-                this.attr({x: 300, y: 0, w: width, h: height});
+                this.attr({x: frame_width/2, y: frame_height - height, w: width, h: height});
             }
         });
 
-        Crafty.e("floor");
-        Crafty.e("block").attribute(50, 200);
+        Crafty.c("goomba", {
+            init: function() {
+                this.requires('2D, DOM, Color, Collision, Solid, Gravity, spr_player, SpriteAnimation')
+                    .attr({x: 10, y: frame_height * 2/5, w: 25, h: 25})
+                    .color('#76390c')
+                    .gravity('Solid')
+                    .gravityConst(.5)
+                    .reel('movingRight', 600, 0, 1, 3);
+
+                var animation_speed = 4;
+                this.bind('NewDirection', function(data) {
+                    this.animate('movingRight', -1);
+                })
+            }
+        });
+
+        //floor
+        Crafty.e("platform").attribute(0, frame_height-20, frame_width, 20);
+        //middle left
+        Crafty.e("platform").attribute(frame_width * 2/3, frame_height * 4/5, frame_width/3, 20);
+        //middle right
+        Crafty.e("platform").attribute(0,frame_height * 4/5, frame_width/3, 20);
+        //middle
+        Crafty.e("platform").attribute(frame_width * 1/6, frame_height * 3/5, frame_width * 2/3, 20)
+        //top left
+        Crafty.e("platform").attribute(frame_width * 2/3, frame_height * 2/5, frame_width/3, 20);
+        //top right
+        Crafty.e("platform").attribute(0, frame_height * 2/5, frame_width/3, 20);
+
+        //player
+        Crafty.e("player").attribute(40, 55);
+        Crafty.e("goomba");
       })
     </script>
   </head>
